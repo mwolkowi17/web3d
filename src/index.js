@@ -2,10 +2,10 @@ import _ from 'lodash';
 import * as THREE from 'three';
 //import * as OBJLoader from 'three-obj-loader';
 import * as OrbitControls from 'three-orbitcontrols';
-import {MTLLoader, OBJLoader} from 'three-obj-mtl-loader'
+import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
 
 let mtlLoader = new MTLLoader();
- 
+
 
 
 'use strict';
@@ -22,23 +22,23 @@ function main() {
     const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
-         alpha: true
+        alpha: true
     });
-    renderer.setClearColor( 0x000000, 0 );
+    renderer.setClearColor(0x000000, 0);
     const fov = 30;
     const aspect = 2; // the canvas default
     const near = 0.1;
     const far = 100;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(0, 5, 28);
-   
+
 
     const controls = new OrbitControls(camera, canvas);
     controls.target.set(0, 5, 0);
-    controls.enableZoom=false;
+    controls.enableZoom = false;
     //controls.maxPolarAngle=1.57;
     //controls.minPolarAngle=1.57;
-    controls.enablePan=false;
+    controls.enablePan = false;
     controls.autoRotate = controlRotation; // autorotate control
     controls.update(true);
 
@@ -50,11 +50,11 @@ function main() {
     //window.addEventListener('mouseup', onMouseUp);
 
     function onMouseDown() {
-         controls.autoRotate = false;
-        
+        controls.autoRotate = false;
+
     }
 
-   
+
     {
         const planeSize = 0.01;
 
@@ -85,7 +85,7 @@ function main() {
 
         camera.add(light);
         scene.add(camera);
-        
+
     }
 
     {
@@ -99,20 +99,33 @@ function main() {
     }
 
     {
-        const objLoader = new OBJLoader();
+        const loadingElem = document.querySelector('#loading');
+        const progressBarElem = loadingElem.querySelector('.progressbar');
+        const loadManager = new THREE.LoadingManager();
+
+        const objLoader = new OBJLoader(loadManager);
         const mtlLoader = new MTLLoader();
         let tytul = 'carbon1.mtl'
-        mtlLoader.load(tytul,  (materials) => {
+
+        //loadingElem.style.display = 'none';
+        mtlLoader.load(tytul, (materials) => {
             //materials.depthWrite = false;
             //materials.side = THREE.BackSide;
             //materials.side = THREE.FrontSide;
             materials.preload()
             objLoader.setMaterials(materials);
             objLoader.load('carbon1.obj', (object) => {
-               
+
                 scene.add(object);
             });
         });
+        loadManager.onLoad = () => {
+            loadingElem.style.display = 'none';
+        }
+        loadManager.onProgress = (urlOfLastItemLoaded, itemsLoaded, itemsTotal) => {
+            const progress = itemsLoaded / itemsTotal;
+            progressBarElem.style.transform = `scaleX(${progress})`;
+        };
 
 
     }
@@ -148,7 +161,7 @@ function main() {
             camera.updateProjectionMatrix();
         }
         renderer.sortObjects = false;
-        
+
         renderer.render(scene, camera);
 
         requestAnimationFrame(render);
