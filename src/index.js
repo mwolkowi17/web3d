@@ -2,9 +2,12 @@ import _ from 'lodash';
 import * as THREE from 'three';
 //import * as OBJLoader from 'three-obj-loader';
 import * as OrbitControls from 'three-orbitcontrols';
-import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
+import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader';
+import {light} from './lightbase';
+import {light2} from './lightdirect';
+import {camera} from './camerabase';
 
-let mtlLoader = new MTLLoader();
+//let mtlLoader = new MTLLoader();
 
 
 
@@ -25,13 +28,7 @@ function main() {
         alpha: true
     });
     renderer.setClearColor(0x000000, 0);
-    const fov = 30;
-    const aspect = 2; // the canvas default
-    const near = 0.1;
-    const far = 100;
-    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(0, 5, 28);
-
+    
 
     const controls = new OrbitControls(camera, canvas);
     controls.target.set(0, 5, 0);
@@ -76,27 +73,13 @@ function main() {
         scene.add(mesh);
     }
 
-    {
-        const skyColor = "whitesmoke"; // light blue
-        const groundColor = "dimgrey"; // brownish orange
-        const intensity = 3.5;
-
-        const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-
+    
         camera.add(light);
         scene.add(camera);
-
-    }
-
-    {
-        const color = 0xFFFFFF;
-        const intensity = 0.07;
-        const light = new THREE.DirectionalLight(color, intensity);
-        light.position.set(0, 10, 0);
-        light.target.position.set(-5, 0, 0);
-        scene.add(light);
-        scene.add(light.target);
-    }
+   
+        scene.add(light2);
+        scene.add(light2.target);
+    
 
     {
         const loadingElem = document.querySelector('#loading');
