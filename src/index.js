@@ -1,20 +1,20 @@
 import _ from 'lodash';
 import * as THREE from 'three';
-//import * as OBJLoader from 'three-obj-loader';
-import * as OrbitControls from 'three-orbitcontrols';
-//import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader';
+
+
+
 import {light} from './lightbase';
 import {light2} from './lightdirect';
 import {camera} from './camerabase';
 import {loadManager, objLoader, mtlLoader} from './loadingModule';
-//let mtlLoader = new MTLLoader();
+import {controls} from './controlsModule';
 
 
 
 'use strict';
 
 /* global THREE */
-var controlRotation = true; // variable controling rotation
+
 
 
 
@@ -30,13 +30,7 @@ function main() {
     renderer.setClearColor(0x000000, 0);
     
 
-    const controls = new OrbitControls(camera, canvas);
-    controls.target.set(0, 5, 0);
-    controls.enableZoom = false;
-    //controls.maxPolarAngle=1.57;
-    //controls.minPolarAngle=1.57;
-    controls.enablePan = false;
-    controls.autoRotate = controlRotation; // autorotate control
+  
     controls.update(true);
 
     const scene = new THREE.Scene();
