@@ -2,11 +2,11 @@ import _ from 'lodash';
 import * as THREE from 'three';
 //import * as OBJLoader from 'three-obj-loader';
 import * as OrbitControls from 'three-orbitcontrols';
-import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader';
+//import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader';
 import {light} from './lightbase';
 import {light2} from './lightdirect';
 import {camera} from './camerabase';
-
+import {loadManager, objLoader, mtlLoader} from './loadingModule';
 //let mtlLoader = new MTLLoader();
 
 
@@ -61,10 +61,7 @@ function main() {
     {
         const loadingElem = document.querySelector('#loading');
         const progressBarElem = loadingElem.querySelector('.progressbar');
-        const loadManager = new THREE.LoadingManager();
-
-        const objLoader = new OBJLoader(loadManager);
-        const mtlLoader = new MTLLoader();
+       
         let tytul = 'carbon1.mtl'
 
         //loadingElem.style.display = 'none';
